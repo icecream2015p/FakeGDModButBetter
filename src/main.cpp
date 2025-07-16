@@ -8,8 +8,9 @@ using namespace geode::prelude;
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/binding/GJAccountManager.hpp>
 #include <Geode/binding/GJUserScore.hpp>
-#include <Geode/modify/GJCommentListLayer.hpp>
+#include <Geode/modify/CommentCell.hpp>
 #include <Geode/binding/GJComment.hpp>
+#include <Geode/modify/LevelInfoLayer.hpp>
 
 
 template<typename Base, typename T>
@@ -81,7 +82,7 @@ class $modify(SupportLayer) {
 		if (Mod::get()->getSavedValue<bool>("alreadyHasMod", false)) {
 			FLAlertLayer::create("Granted", "This account has access to the rating suggestion system.", "OK")->show();
 		} else {
-		if (Mod::get()->getSettingValue<int64_t>("modType") == 3)
+		if (Mod::get()->getSettingValue<int64_t>("modType") >= 3)
 		{
 			SupportLayer::onRequestAccess(sender);
 			GM->m_hasRP = 0;
@@ -101,6 +102,24 @@ class $modify(SupportLayer) {
 	}	
 };
 
+
+class $modify(CommentCell) {
+	void loadFromComment(GJComment* p0) {
+		auto commentAccID = p0->m_accountID;
+		if (GJAccountManager::sharedState()->m_accountID == commentAccID) {
+			p0->m_modBadge = Mod::get()->getSettingValue<int64_t>("modType");
+		}
+		CommentCell::loadFromComment(p0);
+	}
+	virtual void draw() {
+		auto commentAccID = this->m_comment->m_accountID;
+		if (GJAccountManager::sharedState()->m_accountID == commentAccID) {
+			this->m_comment->m_modBadge = Mod::get()->getSettingValue<int64_t>("modType");
+		}
+		CommentCell::draw();
+	}
+};
+
 class $modify(ProfilePage)
 {
 	void loadPageFromUserInfo(GJUserScore* p0)
@@ -113,6 +132,7 @@ class $modify(ProfilePage)
 					case 1: p0->m_modBadge = type; break;
 					case 2: p0->m_modBadge = type; break;
 					case 3: p0->m_modBadge = type; break;
+					default: p0->m_modBadge = 0; break;
 				}
 			}
 		}
