@@ -1,4 +1,6 @@
 # FakeGDMod Changelog
+## v1.0.2
+- Comments are now displayed as moderators
 ## v1.0.1 (2025-01-08)
 - Geode v4.1.0 support
 - Geometry Dash 2.207 support
