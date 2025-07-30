@@ -1,5 +1,5 @@
 # FakeGDMod Changelog
-## v1.0.2
+## v1.0.2 (2025-07-30)
 - Comments are now displayed as moderators
 ## v1.0.1 (2025-01-08)
 - Geode v4.1.0 support
